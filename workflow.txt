@@ -1,0 +1,3 @@
+tool -> acceptes pdf
+agent -> access tools ( no files in agent )
+usecase -> agent access as node

@@ -1,0 +1,29 @@
+curl 'https://aiforce.hcltech.com/dms/list_collections?start_date=2025-12-30&page_number=1' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: en-US,en;q=0.9,en-IN;q=0.8' \
+  -H 'authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Njc3MTc0NDAsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOm51bGx9.s3RiU2SRUrUxz9w2AbZiQEMBegfCWM7rol4BwJM6Jmuhflsg_B6Ut3YhhjocY9SHb-KKkp3Rc_Gp0eeLA28uLer9Xd2YXNFOAc_wji9bRLTm0DYF_RtMOQgAnxrlz9OyXkpnh6ehPxmhPmeqv2RXDmgDeoOVE8JsFaTuqp5pbjnHRwNAz--OmzeoTCncWMruNF21e1qbsOaRQSDPoLuxdOiSj0oPoGnFLJ62GyQqcwp-1b00ZiCbOBvhj_B65KIBZCf5y-yUyyAFFM-LrpJHr_5ZqNFHEK7cgKzwzKQzMX6QlBWbiEcbdWQ3HohsAimCiYEbYrVQmjwPrmDoVqYelA' \
+  -b '_vwo_uuid_v2=D118A1BFE474E643C53090D72EEFF4A08|9972f4688dd945214fbd9fcd1cd31e75; _vwo_uuid=D118A1BFE474E643C53090D72EEFF4A08; OptanonAlertBoxClosed=2025-09-08T20:06:15.702Z; _ga=GA1.1.1501285658.1757361976; _scid=nhZZK8NH-jeWmfmPkzhgOpsrFaz6ZPMH; FPID=FPID2.2.YG4GeqEWOQZ46DdjGLTn0rbHTYmkLzn5OVxVS0Pl7%2F8%3D.1757361976; _gcl_au=1.1.1874100499.1765532550; _clck=1r813sj%5E2%5Eg1s%5E1%5E2143; _scid_r=q5ZZK8NH-jeWmfmPkzhgOpsrFaz6ZPMHXiB9fQ; _sc_cspv=https%3A%2F%2Ftr.snapchat.com; _ga_436SFS2JZT=GS2.1.s1765532550$o4$g1$t1765532640$j59$l0$h1534020692; OptanonConsent=isGpcEnabled=0&datestamp=Wed+Dec+31+2025+11%3A47%3A39+GMT%2B0530+(India+Standard+Time)&version=202510.2.0&browserGpcFlag=0&isIABGlobal=false&hosts=&consentId=1072aba0-b8cb-4cbe-975b-e0c857165ce4&interactionCount=1&isAnonUser=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1%2CC0005%3A1%2CC0007%3A1&intType=1&geolocation=IN%3BMH&AwaitingReconsent=false; _ga_FJ0BNK0FH7=GS2.1.s1767161860$o1$g1$t1767162104$j60$l0$h0; BCSI-CS-9d3a441876b9b495=1' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://aiforce.hcltech.com/prj' \
+  -H 'sec-ch-ua: "Microsoft Edge";v="143", "Chromium";v="143", "Not A(Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Windows"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64
+; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0'
+
+
+
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTkyMzM0MTcsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOiIxNDY1NDBkMDlkZTk0MjVjYmViNzZlZDQ2NTAxNzFhZSJ9.JGwqZffLfjGHWKgaPSLEul0-mxyhGwdQdfAZU0ionHwWM0GdvgPJj4em22ihQ11buzb7A_kRp6hWqRrmbGhr96I1YKzYVq7fVtgVZ3_oBTTk88PgBZxZgsBdoR9TgEaFI4M7XNUTBTRLfGxFZTIj9bC4MBCTozW-LJGcfHAvjZecTnfpXDIhyJgLJCGe-scOZ1-capuRPcyKKAc8sihCgw5ZYw1AGnZqco7A4v1ub23e1XUK2LJkmrvY5PgdotLN1rLS5MdJbNtf6ehgIhvuXVIzp-ljRG3QzDvBm5VVI88CE9eh2pWGODXyBZ5JOtzEX0P4aAhuGmlUhpU_oaPSpA
+
+
+
+
+
+
+Expire - 7 Jan 2027
+
+
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTkzMTYwNTIsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOiI1ZjI3MjYzNTc5MTI0ZDFmOTMwMWNmZjU2ZDE3MmM4ZCJ9.gk5l1bwxBMl61Rjti67bXwKpr7IUv6EFyAr6YuJx8RxQ1uzCJy4ZefKNySVAF18HzOJcAKLovZsRm8_QYx7xoP3MNlYYy7kF5-bqoduLVTPVTbi2xoYs3WvuTsDIKTPixXXc-xXzOEDCHfzRVdELe9c8Lxnj7GdP-AXtJneJjPKqsYc8MFMPVvD9lblb7H4-ryfcIPC5RiSrEUah3T-euutzetwFWhBbgxM8tTZAk-_5_UcsDy5D-Kc0fQbkzM711EX47V_4npZz1dnXJWPkcipxV8DGCKQ86qVrvpyYGLDae0wCHkAaofQbUB1iZv5FpuOtmqnmqPYsxoBUGHqOew
