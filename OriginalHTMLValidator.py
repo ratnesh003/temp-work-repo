@@ -394,7 +394,6 @@ def validate_images_in_html(html_path, base_path):
         results.append(entry)
     return results
 
-
 def create_word_report(validation_results_by_file, output_file):
     """Create table report in Word document"""
     
@@ -439,7 +438,6 @@ def create_word_report(validation_results_by_file, output_file):
                 row.cells[1].text = category.replace('_', ' ').title()
                 row.cells[2].text = base_issue
                 row.cells[3].text = str(count)
-
 
 def link_checker(root_dir, output_file, threads=10):
     
@@ -769,7 +767,6 @@ def link_checker(root_dir, output_file, threads=10):
 
     # Save the document
     return results
-
 
 def is_camel_case(s):
     if not isinstance(s, str):

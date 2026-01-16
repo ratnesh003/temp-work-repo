@@ -1,5 +1,3 @@
-import os
-import re
 import json
 import math
 import requests
@@ -7,7 +5,7 @@ import warnings
 import urllib.parse
 from tqdm import tqdm
 from bs4 import BeautifulSoup
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -345,26 +343,27 @@ def html_link_validation_in_collection_by_id(collection_id: int):
 
     return results
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     auth_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTkzMTYwNTIsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOiI1ZjI3MjYzNTc5MTI0ZDFmOTMwMWNmZjU2ZDE3MmM4ZCJ9.gk5l1bwxBMl61Rjti67bXwKpr7IUv6EFyAr6YuJx8RxQ1uzCJy4ZefKNySVAF18HzOJcAKLovZsRm8_QYx7xoP3MNlYYy7kF5-bqoduLVTPVTbi2xoYs3WvuTsDIKTPixXXc-xXzOEDCHfzRVdELe9c8Lxnj7GdP-AXtJneJjPKqsYc8MFMPVvD9lblb7H4-ryfcIPC5RiSrEUah3T-euutzetwFWhBbgxM8tTZAk-_5_UcsDy5D-Kc0fQbkzM711EX47V_4npZz1dnXJWPkcipxV8DGCKQ86qVrvpyYGLDae0wCHkAaofQbUB1iZv5FpuOtmqnmqPYsxoBUGHqOew"
+    auth_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTkzMTYwNTIsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOiI1ZjI3MjYzNTc5MTI0ZDFmOTMwMWNmZjU2ZDE3MmM4ZCJ9.gk5l1bwxBMl61Rjti67bXwKpr7IUv6EFyAr6YuJx8RxQ1uzCJy4ZefKNySVAF18HzOJcAKLovZsRm8_QYx7xoP3MNlYYy7kF5-bqoduLVTPVTbi2xoYs3WvuTsDIKTPixXXc-xXzOEDCHfzRVdELe9c8Lxnj7GdP-AXtJneJjPKqsYc8MFMPVvD9lblb7H4-ryfcIPC5RiSrEUah3T-euutzetwFWhBbgxM8tTZAk-_5_UcsDy5D-Kc0fQbkzM711EX47V_4npZz1dnXJWPkcipxV8DGCKQ86qVrvpyYGLDae0wCHkAaofQbUB1iZv5FpuOtmqnmqPYsxoBUGHqOew"
 
-#     content = get_file_content(file_id=8356, auth_token=auth_token)
-#     results = link_checker_single_html(html_content=content, source_file="0001485366.html")
-#     print(json.dumps(results, indent=4))
+    content = get_file_content(file_id=8356, auth_token=auth_token)
+    results = link_checker_single_html(html_content=content, source_file="0001485366.html")
+    print(json.dumps(results, indent=4))
+    print(content)
 
 #------------------------------------------------------------------------------------------------
 
-if __name__ == "__main__":
-    data = html_link_validation_in_collection_by_id(collection_id=1152)
+# if __name__ == "__main__":
+#     data = html_link_validation_in_collection_by_id(collection_id=1152)
 
-    file_path = "initial_files_invalid_links.json"
+#     file_path = "initial_files_invalid_links.json"
 
-    try:
-        # Open the file in write mode ('w')
-        with open(file_path, 'w') as json_file:
-            # Use json.dump() to write the data to the file
-            json.dump(data, json_file, indent=4)
-        print(f"Successfully wrote data to {file_path}")
-    except IOError as e:
-        print(f"Error writing to file: {e}")
+#     try:
+#         # Open the file in write mode ('w')
+#         with open(file_path, 'w') as json_file:
+#             # Use json.dump() to write the data to the file
+#             json.dump(data, json_file, indent=4)
+#         print(f"Successfully wrote data to {file_path}")
+#     except IOError as e:
+#         print(f"Error writing to file: {e}")
