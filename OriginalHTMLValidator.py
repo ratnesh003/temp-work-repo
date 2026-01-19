@@ -925,4 +925,4 @@ def run_usecase(usecase_name, form_data, exec_id, job_name, model_name, input_di
     return {"status": "success", "msg": "Success"}
 
 if __name__ == "__main__":
-    run_usecase(usecase_name="",form_data="", exec_id="", job_name="", model_name="",input_dirpath="C:/Users/pasiratnesh.tarakant/Downloads/Xerox_en-US_initial_HTML/Xerox_en-US", output_dirpath="FINAL_HTML_OUTPUT")
+    run_usecase(usecase_name="",form_data="", exec_id="", job_name="", model_name="",input_dirpath="C:/Users/pasiratnesh.tarakant/Downloads/Xerox_en-US_final_HTML/Xerox_en-US", output_dirpath="FINAL_HTML_OUTPUT")
