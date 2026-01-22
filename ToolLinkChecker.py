@@ -81,9 +81,10 @@ def get_file_content(file_id: int, auth_token: str):
         resp.raise_for_status()
         return resp.text
     except requests.exceptions.HTTPError as http_err:
-        return f"HTTP error occurred: {http_err}"
+        error_msg = f"HTTP error occurred: {http_err}"
         if http_err.response is not None:
-            return f"Response body: {http_err.response.text}"
+            error_msg += f" | Response body: {http_err.response.text}"
+        return error_msg
     except requests.exceptions.RequestException as err:
         return f"Request failed: {err}"
 
