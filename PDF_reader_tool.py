@@ -14,7 +14,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from pypdf import PdfReader
 import html
 
-def list_all_html_files_in_collection(
+def list_all_pdf_files_in_collection(
     collection_id: int,
     auth_token: str,
     search_query: str = ".pdf",
@@ -79,9 +79,6 @@ def extract_text_from_pdf(text):
     with open("output.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    with open("output.pdf", "rb") as f:
-        print(f.read(5))  # b'%PDF-'
-
     return pdf_bytes
 
 
@@ -94,21 +91,12 @@ def get_file_content(file_id: int, auth_token: str):
 
     warnings.simplefilter("ignore", InsecureRequestWarning)
 
-    headers = {"Authorization": f"Bearer {auth_token}", "Accept": "application/json"}
+    headers = {"Authorization": f"Bearer {auth_token}", "Accept": "*/*"}
 
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=15, verify=False)
         resp.raise_for_status()
-
-        out_path = "output.pdf"
-        
-        with open(out_path, "wb") as f:
-                for chunk in resp.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
-            # Sanity check
-        with open(out_path, "rb") as f:
-            print(f.read(5))  # should be b'%PDF-'
+        return resp.text
 
     except requests.exceptions.HTTPError as http_err:
         return f"HTTP error occurred: {http_err}"
@@ -117,8 +105,72 @@ def get_file_content(file_id: int, auth_token: str):
     except requests.exceptions.RequestException as err:
         return f"Request failed: {err}"
 
+
+
+import warnings
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import requests
+from io import BytesIO
+
+# def get_file_content(file_id: int, auth_token: str):
+#     """
+#     Fetches file content from the API and returns it without writing to disk.
+#     - If Content-Type is application/json -> returns dict from resp.json()
+#     - Else -> returns bytes of the file content (e.g., PDF)
+    
+#     Returns:
+#         dict | bytes | str (on error)
+#     """
+#     url = "https://aiforce.hcltech.com/dms/file_download"
+#     params = {"file_id": file_id}
+
+#     warnings.simplefilter("ignore", InsecureRequestWarning)
+#     headers = {
+#         "Authorization": f"Bearer {auth_token}",
+#         # Ask for anything the server wants to return; you can keep JSON for explicit JSON flows
+#         "Accept": "*/*"
+#     }
+
+#     try:
+#         # stream=True to iterate content safely
+#         with requests.get(url, headers=headers, params=params, timeout=15, verify=False, stream=True) as resp:
+#             resp.raise_for_status()
+
+#             content_type = resp.headers.get("Content-Type", "").lower()
+
+#             # If API responds with JSON (e.g., error or metadata), return JSON directly
+#             if "application/json" in content_type:
+#                 return resp.json()
+
+#             # Otherwise, read into memory and return bytes (e.g., PDF)
+#             buffer = BytesIO()
+#             for chunk in resp.iter_content(chunk_size=8192):
+#                 if chunk:
+#                     buffer.write(chunk)
+
+#             data = buffer.getvalue()
+
+#             # Optional sanity check for PDFs (starts with %PDF-)
+#             if "pdf" in content_type or (len(data) >= 5 and data[:5] == b"%PDF-"):
+#                 # It's likely a PDF; you can return bytes to the caller
+#                 return data
+
+#             # If it's some other binary (e.g., docx, image), still return bytes
+#             return data
+
+#     except requests.exceptions.HTTPError as http_err:
+#         # Try to include server's response body if available
+#         try:
+#             body = http_err.response.text if http_err.response is not None else ""
+#         except Exception:
+#             body = ""
+#         return f"HTTP error occurred: {http_err} {(' | Response body: ' + body) if body else ''}"
+
+#     except requests.exceptions.RequestException as err:
+#         return f"Request failed: {err}"
+
 if __name__ == "__main__":
     auth_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTkzMTYwNTIsInVzZXJfaWQiOjExMTcsInVzZXJfbmFtZSI6InJhdG5lc2hwYXNpMDMiLCJlbWFpbF9pZCI6InBhc2lyYXRuZXNoLnRhcmFrYW50QGhjbHRlY2guY29tIiwib3JnX2lkIjoxLCJyb2xlIjoiQ29udHJpYnV0b3IiLCJyb2xlX2lkIjozLCJwcm9qZWN0X2lkIjoyNSwiaXNfc3VwZXJfYWRtaW4iOmZhbHNlLCJyb2xlX3R5cGVfaWQiOjMsInJvbGVfdHlwZSI6IkNvbnRyaWJ1dG9yIiwidXNlcl90eXBlIjoicGxhdGZvcm1fdXNlciIsImp0aWQiOiI1ZjI3MjYzNTc5MTI0ZDFmOTMwMWNmZjU2ZDE3MmM4ZCJ9.gk5l1bwxBMl61Rjti67bXwKpr7IUv6EFyAr6YuJx8RxQ1uzCJy4ZefKNySVAF18HzOJcAKLovZsRm8_QYx7xoP3MNlYYy7kF5-bqoduLVTPVTbi2xoYs3WvuTsDIKTPixXXc-xXzOEDCHfzRVdELe9c8Lxnj7GdP-AXtJneJjPKqsYc8MFMPVvD9lblb7H4-ryfcIPC5RiSrEUah3T-euutzetwFWhBbgxM8tTZAk-_5_UcsDy5D-Kc0fQbkzM711EX47V_4npZz1dnXJWPkcipxV8DGCKQ86qVrvpyYGLDae0wCHkAaofQbUB1iZv5FpuOtmqnmqPYsxoBUGHqOew"
-    data=get_file_content(file_id=9884, auth_token=auth_token)
+    text = get_file_content(file_id=9884, auth_token=auth_token)
     # data = extract_text_from_pdf(text=text)
-    print(data)
+    # print(data)

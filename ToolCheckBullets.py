@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
     data = check_bullets_in_collection_by_id(collection_id=1152, auth_token=auth_token)
 
-    file_path = "initial_files_check_spaces.json"
+    file_path = "initial_files_check_bullets.json"
 
     try:
         # Open the file in write mode ('w')
