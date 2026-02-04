@@ -10,328 +10,329 @@ from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
 from urllib3.exceptions import InsecureRequestWarning
 
-def list_all_html_files_in_collection(
-    collection_id: int,
-    auth_token: str,
-    search_query: str = ".html",
-    page_size: int = 100,
-    timeout: int = 15,
-) -> List[Dict[str, Any]]:
-    """
-    Returns ALL .html files from a collection using total_count for pagination.
-    """
+def html_link_validation_in_collection_by_id(collection_id: int, auth_token: str):
 
-    warnings.simplefilter("ignore", InsecureRequestWarning)
-
-    url = f"https://aiforce.hcltech.com/dms/collection/{collection_id}"
-    headers = {
-        "Authorization": f"Bearer {auth_token}",
-        "Accept": "application/json",
-    }
-
-    def fetch_page(page_number: int) -> Dict[str, Any]:
-        params = {
-            "page_number": page_number,
-            "page_size": page_size,
-            "search_query": search_query,
-        }
-        resp = requests.get(url, headers=headers, params=params, timeout=timeout, verify=False)
-        resp.raise_for_status()
-        return resp.json()["data"]
-
-    # ✅ First call – get total_count
-    first_page = fetch_page(1)
-    total_count = first_page.get("total_count", 0)
-    items = first_page.get("items", [])
-
-    if total_count == 0:
-        return []
-
-    # ✅ Calculate number of pages
-    total_pages = math.ceil(total_count / page_size)
-
-    # ✅ Fetch remaining pages
-    for page in range(2, total_pages + 1):
-        data = fetch_page(page)
-        items.extend(data.get("items", []))
-
-    result = [
-            {
-                "id": item.get("id"),
-                "file_name": item.get("file_name")
-            }
-            for item in items
-            if isinstance(item, dict)  # guard against non-dict items
-        ]
-
-    return result
-
-def get_file_content(file_id: int, auth_token: str):
-    url = "https://aiforce.hcltech.com/dms/file_download"
-
-    params = {
-        "file_id": file_id
-    }
-
-    warnings.simplefilter("ignore", InsecureRequestWarning)
-
-    headers = {"Authorization": f"Bearer {auth_token}", "Accept": "application/json"}
-
-    try:
-        resp = requests.get(url, headers=headers, params=params, timeout=15, verify=False)
-        resp.raise_for_status()
-        return resp.text
-    except requests.exceptions.HTTPError as http_err:
-        return f"HTTP error occurred: {http_err}"
-        if http_err.response is not None:
-            return f"Response body: {http_err.response.text}"
-    except requests.exceptions.RequestException as err:
-        return f"Request failed: {err}"
-
-def build_html_document_index(
-    collection_id: int,
-    auth_token: str
-) -> Dict[str, List[int]]:
-    """
-    Maps logical HTML document names (e.g. 0001485246.html)
-    to DMS file IDs, even when filenames are prefixed.
-    """
-
-    items = list_all_html_files_in_collection(
-        collection_id=collection_id,
-        auth_token=auth_token,
-        search_query=".html",
-        page_size=100,
-    )
-
-    index: Dict[str, List[int]] = {}
-
-    for item in items:
-        name = item.get("file_name", "")
-        fid = item.get("id")
-
-        if not name or not fid:
-            continue
-
-        base = os.path.basename(name).lower()
-
-        # Extract logical html identifier
-        # e.g. Xerox_en-US_0001485246.html → 0001485246.html
-        if base.endswith(".html"):
-            logical = base.split("_")[-1]
-
-            index.setdefault(logical, []).append(fid)
-
-    return index
-
-def link_checker_single_html(
-    html_content: str,
-    source_file: str,
-    html_document_index: Dict[str, List[int]],
-    timeout: int = 5,
-    threads: int = 10
-) -> List[Dict[str, Any]]:
-    """
-    Validate links found in a single HTML content string (no base_dir / filesystem).
-    Returns only invalid/broken entries, preserving original link_checker behavior
-    for extraction, filtering, and HTTP checks.
-
-    Args:
-        html_content: Full HTML text of one file.
-        source_file: Logical name/path of the HTML file (used for reporting).
-        timeout: Requests timeout (seconds) for external URL checks.
-        threads: Max workers for parallel link checks.
-
-    Returns:
-        List of dicts for invalid links:
-        {
-            "file": <source_file>,
-            "href": <original href/src>,
-            "text": <link text or short description>,
-            "resolved_url": <absolute URL, fragment, or raw local path>,
-            "status": <int or str>,
-            "error": <string>
-        }
-    """
-
-    soup = BeautifulSoup(html_content, "html.parser")
-
-    # Consistent with original: skip typical static resources
-    excluded_exts = (".html", ".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".gif", ".ico")
-
-    links: List[Dict[str, Any]] = []
-
-    # ... links
-    for a in soup.find_all("a", href=True):
-        href = a.get("href", "")
-        if not href or href.startswith("javascript:") or href.startswith("mailto:") or href == "#":
-            continue
-        if href.lower().endswith(excluded_exts):
-            continue
-        links.append({
-            "source_file": source_file,
-            "href": href,
-            "text": a.get_text(strip=True)[:50] or "Link",
-        })
-
-    # ... resources
-    for link_tag in soup.find_all("link", href=True):
-        href = link_tag.get("href", "")
-        if not href or href.lower().endswith(excluded_exts):
-            continue
-        links.append({
-            "source_file": source_file,
-            "href": href,
-            "text": "CSS/Resource link",
-        })
-    
-    # ... images (optional as in original)
-    for img in soup.find_all("img", src=True):
-        src = img.get("src", "")
-        if not src or src.lower().endswith(excluded_exts):
-            continue
-        links.append({
-            "source_file": source_file,
-            "href": src,
-            "text": img.get("alt", "Image")[:50] or "Image",
-        })
-    
-    # De-duplicate by original href/src to reduce repeated checks
-    unique_links = []
-    seen = set()
-    for link in links:
-        if link["href"] not in seen:
-            seen.add(link["href"])
-            unique_links.append(link)
-            
-    def normalize_html_href(href: str) -> str:
-        parsed = urllib.parse.urlparse(href)
-        return parsed.path.split("/")[-1].lower()
-
-            
-    def resolve_local_html(href: str) -> Dict[str, Any]:
-        logical_name = normalize_html_href(href)
-
-        matches = html_document_index.get(logical_name, [])
-
-        if len(matches) == 1:
-            return {
-                "status": 200,
-                "is_broken": False,
-                "error": "",
-            }
-
-        if len(matches) > 1:
-            return {
-                "status": "Ambiguous",
-                "is_broken": True,
-                "error": f"Multiple documents resolve to '{logical_name}'",
-            }
-
-        return {
-            "status": 404,
-            "is_broken": True,
-            "error": f"Logical HTML '{logical_name}' not found in collection",
-        }
-
-    
-    def resolve_url(href: str) -> str:
+    def list_all_html_files_in_collection(
+        collection_id: int,
+        auth_token: str,
+        search_query: str = ".html",
+        page_size: int = 100,
+        timeout: int = 15,
+    ) -> List[Dict[str, Any]]:
         """
-        Resolve for reporting:
-        - http/https: return as-is
-        - fragment-only (#...): source_file + fragment
-        - local/relative: return raw href (no filesystem resolution without base_dir)
+        Returns ALL .html files from a collection using total_count for pagination.
         """
-        if href.startswith(("http://", "https://")):
-            return href
-        if href.startswith("#"):
-            return f"{source_file}{href}"
-        # No base_dir: keep the raw href for transparency
-        return urllib.parse.unquote(href).replace("\\", "/")
 
-    def check_link(link_info: Dict[str, Any]) -> Dict[str, Any]:
-        href = link_info["href"]
-        result: Dict[str, Any] = {
-            "file": source_file,
-            "href": href,
-            "text": link_info["text"],
-            "resolved_url": resolve_url(href),
-            "status": None,
-            "error": "",
-            "is_broken": False,
+        warnings.simplefilter("ignore", InsecureRequestWarning)
+
+        url = f"https://aiforce.hcltech.com/dms/collection/{collection_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_token}",
+            "Accept": "application/json",
         }
-        try:
-            if href.startswith(("http://", "https://")):
-                # External URL: try HEAD, fallback to GET if >=400
-                try:
-                    resp = requests.head(href, allow_redirects=True, timeout=timeout)
-                    code = resp.status_code
-                    if code >= 400:
-                        resp = requests.get(href, timeout=timeout)
-                        code = resp.status_code
-                    result["status"] = code
-                    result["is_broken"] = code >= 400
-                    if result["is_broken"]:
-                        result["error"] = f"HTTP {code}"
-                except requests.exceptions.Timeout:
-                    result["status"] = "Timeout"
-                    result["is_broken"] = True
-                    result["error"] = "Request timed out"
-                except requests.exceptions.ConnectionError:
-                    result["status"] = "Connection Error"
-                    result["is_broken"] = True
-                    result["error"] = "Failed to establish connection"
-                except requests.exceptions.RequestException as e:
-                    result["status"] = "Request Error"
-                    result["is_broken"] = True
-                    result["error"] = str(e)
-            else:
-                # Fragment-only (same file)
-                if href.startswith("#"):
-                    result["status"] = 200
-                    result["is_broken"] = False
-                    return result
 
-                # Local HTML (with or without fragment)
-                if ".html" in href.lower():
-                    local = resolve_local_html(href)
-                    result["status"] = local["status"]
-                    result["is_broken"] = local["is_broken"]
-                    result["error"] = local["error"]
-                    return result
+        def fetch_page(page_number: int) -> Dict[str, Any]:
+            params = {
+                "page_number": page_number,
+                "page_size": page_size,
+                "search_query": search_query,
+            }
+            resp = requests.get(url, headers=headers, params=params, timeout=timeout, verify=False)
+            resp.raise_for_status()
+            return resp.json()["data"]
 
-                # Other local assets
-                result["status"] = "Not Validated"
-                result["is_broken"] = True
-                result["error"] = "Local path cannot be verified without base URL"
+        # ✅ First call – get total_count
+        first_page = fetch_page(1)
+        total_count = first_page.get("total_count", 0)
+        items = first_page.get("items", [])
 
-        except Exception as e:
-            result["status"] = "Error"
-            result["is_broken"] = True
-            result["error"] = str(e)
+        if total_count == 0:
+            return []
+
+        # ✅ Calculate number of pages
+        total_pages = math.ceil(total_count / page_size)
+
+        # ✅ Fetch remaining pages
+        for page in range(2, total_pages + 1):
+            data = fetch_page(page)
+            items.extend(data.get("items", []))
+
+        result = [
+                {
+                    "id": item.get("id"),
+                    "file_name": item.get("file_name")
+                }
+                for item in items
+                if isinstance(item, dict)  # guard against non-dict items
+            ]
 
         return result
 
-    # Parallel checks (preserve original threading)
-    with ThreadPoolExecutor(max_workers=threads) as executor:
-        results = list(executor.map(check_link, unique_links))
+    def get_file_content(file_id: int, auth_token: str):
+        url = "https://aiforce.hcltech.com/dms/file_download"
 
-    # Return only broken/invalid (including Not Validated)
-    invalid = [r for r in results if r.get("is_broken")]
-    # Shape output to the fields you asked for
-    return [
-        {
-            "file": r["file"],
-            "href": r["href"],
-            "resolved_url": r["resolved_url"],
-            "status": r["status"],
-            "error": r.get("error", ""),
-            "text": r.get("text", ""),
+        params = {
+            "file_id": file_id
         }
-        for r in invalid
-    ]
 
-def html_link_validation_in_collection_by_id(collection_id: int, auth_token: str):
+        warnings.simplefilter("ignore", InsecureRequestWarning)
+
+        headers = {"Authorization": f"Bearer {auth_token}", "Accept": "application/json"}
+
+        try:
+            resp = requests.get(url, headers=headers, params=params, timeout=15, verify=False)
+            resp.raise_for_status()
+            return resp.text
+        except requests.exceptions.HTTPError as http_err:
+            return f"HTTP error occurred: {http_err}"
+            if http_err.response is not None:
+                return f"Response body: {http_err.response.text}"
+        except requests.exceptions.RequestException as err:
+            return f"Request failed: {err}"
+
+    def build_html_document_index(
+        collection_id: int,
+        auth_token: str
+    ) -> Dict[str, List[int]]:
+        """
+        Maps logical HTML document names (e.g. 0001485246.html)
+        to DMS file IDs, even when filenames are prefixed.
+        """
+
+        items = list_all_html_files_in_collection(
+            collection_id=collection_id,
+            auth_token=auth_token,
+            search_query=".html",
+            page_size=100,
+        )
+
+        index: Dict[str, List[int]] = {}
+
+        for item in items:
+            name = item.get("file_name", "")
+            fid = item.get("id")
+
+            if not name or not fid:
+                continue
+
+            base = os.path.basename(name).lower()
+
+            # Extract logical html identifier
+            # e.g. Xerox_en-US_0001485246.html → 0001485246.html
+            if base.endswith(".html"):
+                logical = base.split("_")[-1]
+
+                index.setdefault(logical, []).append(fid)
+
+        return index
+
+    def link_checker_single_html(
+        html_content: str,
+        source_file: str,
+        html_document_index: Dict[str, List[int]],
+        timeout: int = 5,
+        threads: int = 10
+    ) -> List[Dict[str, Any]]:
+        """
+        Validate links found in a single HTML content string (no base_dir / filesystem).
+        Returns only invalid/broken entries, preserving original link_checker behavior
+        for extraction, filtering, and HTTP checks.
+
+        Args:
+            html_content: Full HTML text of one file.
+            source_file: Logical name/path of the HTML file (used for reporting).
+            timeout: Requests timeout (seconds) for external URL checks.
+            threads: Max workers for parallel link checks.
+
+        Returns:
+            List of dicts for invalid links:
+            {
+                "file": <source_file>,
+                "href": <original href/src>,
+                "text": <link text or short description>,
+                "resolved_url": <absolute URL, fragment, or raw local path>,
+                "status": <int or str>,
+                "error": <string>
+            }
+        """
+
+        soup = BeautifulSoup(html_content, "html.parser")
+
+        # Consistent with original: skip typical static resources
+        excluded_exts = (".html", ".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".gif", ".ico")
+
+        links: List[Dict[str, Any]] = []
+
+        # ... links
+        for a in soup.find_all("a", href=True):
+            href = a.get("href", "")
+            if not href or href.startswith("javascript:") or href.startswith("mailto:") or href == "#":
+                continue
+            if href.lower().endswith(excluded_exts):
+                continue
+            links.append({
+                "source_file": source_file,
+                "href": href,
+                "text": a.get_text(strip=True)[:50] or "Link",
+            })
+
+        # ... resources
+        for link_tag in soup.find_all("link", href=True):
+            href = link_tag.get("href", "")
+            if not href or href.lower().endswith(excluded_exts):
+                continue
+            links.append({
+                "source_file": source_file,
+                "href": href,
+                "text": "CSS/Resource link",
+            })
+        
+        # ... images (optional as in original)
+        for img in soup.find_all("img", src=True):
+            src = img.get("src", "")
+            if not src or src.lower().endswith(excluded_exts):
+                continue
+            links.append({
+                "source_file": source_file,
+                "href": src,
+                "text": img.get("alt", "Image")[:50] or "Image",
+            })
+        
+        # De-duplicate by original href/src to reduce repeated checks
+        unique_links = []
+        seen = set()
+        for link in links:
+            if link["href"] not in seen:
+                seen.add(link["href"])
+                unique_links.append(link)
+                
+        def normalize_html_href(href: str) -> str:
+            parsed = urllib.parse.urlparse(href)
+            return parsed.path.split("/")[-1].lower()
+
+                
+        def resolve_local_html(href: str) -> Dict[str, Any]:
+            logical_name = normalize_html_href(href)
+
+            matches = html_document_index.get(logical_name, [])
+
+            if len(matches) == 1:
+                return {
+                    "status": 200,
+                    "is_broken": False,
+                    "error": "",
+                }
+
+            if len(matches) > 1:
+                return {
+                    "status": "Ambiguous",
+                    "is_broken": True,
+                    "error": f"Multiple documents resolve to '{logical_name}'",
+                }
+
+            return {
+                "status": 404,
+                "is_broken": True,
+                "error": f"Logical HTML '{logical_name}' not found in collection",
+            }
+
+        
+        def resolve_url(href: str) -> str:
+            """
+            Resolve for reporting:
+            - http/https: return as-is
+            - fragment-only (#...): source_file + fragment
+            - local/relative: return raw href (no filesystem resolution without base_dir)
+            """
+            if href.startswith(("http://", "https://")):
+                return href
+            if href.startswith("#"):
+                return f"{source_file}{href}"
+            # No base_dir: keep the raw href for transparency
+            return urllib.parse.unquote(href).replace("\\", "/")
+
+        def check_link(link_info: Dict[str, Any]) -> Dict[str, Any]:
+            href = link_info["href"]
+            result: Dict[str, Any] = {
+                "file": source_file,
+                "href": href,
+                "text": link_info["text"],
+                "resolved_url": resolve_url(href),
+                "status": None,
+                "error": "",
+                "is_broken": False,
+            }
+            try:
+                if href.startswith(("http://", "https://")):
+                    # External URL: try HEAD, fallback to GET if >=400
+                    try:
+                        resp = requests.head(href, allow_redirects=True, timeout=timeout)
+                        code = resp.status_code
+                        if code >= 400:
+                            resp = requests.get(href, timeout=timeout)
+                            code = resp.status_code
+                        result["status"] = code
+                        result["is_broken"] = code >= 400
+                        if result["is_broken"]:
+                            result["error"] = f"HTTP {code}"
+                    except requests.exceptions.Timeout:
+                        result["status"] = "Timeout"
+                        result["is_broken"] = True
+                        result["error"] = "Request timed out"
+                    except requests.exceptions.ConnectionError:
+                        result["status"] = "Connection Error"
+                        result["is_broken"] = True
+                        result["error"] = "Failed to establish connection"
+                    except requests.exceptions.RequestException as e:
+                        result["status"] = "Request Error"
+                        result["is_broken"] = True
+                        result["error"] = str(e)
+                else:
+                    # Fragment-only (same file)
+                    if href.startswith("#"):
+                        result["status"] = 200
+                        result["is_broken"] = False
+                        return result
+
+                    # Local HTML (with or without fragment)
+                    if ".html" in href.lower():
+                        local = resolve_local_html(href)
+                        result["status"] = local["status"]
+                        result["is_broken"] = local["is_broken"]
+                        result["error"] = local["error"]
+                        return result
+
+                    # Other local assets
+                    result["status"] = "Not Validated"
+                    result["is_broken"] = True
+                    result["error"] = "Local path cannot be verified without base URL"
+
+            except Exception as e:
+                result["status"] = "Error"
+                result["is_broken"] = True
+                result["error"] = str(e)
+
+            return result
+
+        # Parallel checks (preserve original threading)
+        with ThreadPoolExecutor(max_workers=threads) as executor:
+            results = list(executor.map(check_link, unique_links))
+
+        # Return only broken/invalid (including Not Validated)
+        invalid = [r for r in results if r.get("is_broken")]
+        # Shape output to the fields you asked for
+        return [
+            {
+                "file": r["file"],
+                "href": r["href"],
+                "resolved_url": r["resolved_url"],
+                "status": r["status"],
+                "error": r.get("error", ""),
+                "text": r.get("text", ""),
+            }
+            for r in invalid
+        ]
+
     """
     Run link validation across all HTML files in a DMS collection and return a consolidated list
     of invalid (or not-validated) links with diagnostic details.

@@ -1,0 +1,43 @@
+[
+    {
+        "file_id": 8549,
+        "file_name": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001514051.html",
+        "invalid_count": 2,
+        "invalid_paths": [
+            {
+                "navigation_path": "3. For Mobile Printing, click AirPrint .",
+                "issues": [
+                    "camel_case"
+                ],
+                "camel_case_words": [
+                    "AirPrint"
+                ]
+            },
+            {
+                "navigation_path": "4. To enable AirPrint, click the Enable toggle button.",
+                "issues": [
+                    "camel_case"
+                ],
+                "camel_case_words": [
+                    "AirPrint,"
+                ]
+            }
+        ]
+    },
+    {
+        "file_id": 8542,
+        "file_name": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001508945.html",
+        "invalid_count": 1,
+        "invalid_paths": [
+            {
+                "navigation_path": "3. Touch @PrintByXerox .",
+                "issues": [
+                    "camel_case"
+                ],
+                "camel_case_words": [
+                    "@PrintByXerox"
+                ]
+            }
+        ]
+    }
+]

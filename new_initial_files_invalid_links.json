@@ -8,68 +8,36 @@
         "text": "Browser Requirements"
     },
     {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001558822.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=Color&Model=PLC92xx&PgName=man&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=Color&Model=PLC92xx&PgName=man&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/office/PLC92XXdocs"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001508964.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=Color&Model=PLC92xx&PgName=man&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=Color&Model=PLC92xx&PgName=man&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/office/PLC92XXdocs"
-    },
-    {
         "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001505346.html",
         "href": "https://dtsc.ca.gov/perchlorate/",
         "resolved_url": "https://dtsc.ca.gov/perchlorate/",
-        "status": 403,
-        "error": "HTTP 403",
-        "text": "https://dtsc.ca.gov/perchlorate/"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001489879.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
         "status": "Connection Error",
         "error": "Failed to establish connection",
-        "text": "www.xerox.com/rmlna"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001489879.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC92XX&PgName=order&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC92XX&PgName=order&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/office/PLC92XXsupplies"
+        "text": "https://dtsc.ca.gov/perchlorate/"
     },
     {
         "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485514.html",
         "href": "https://dtsc.ca.gov/perchlorate/",
         "resolved_url": "https://dtsc.ca.gov/perchlorate/",
-        "status": 403,
-        "error": "HTTP 403",
+        "status": "Connection Error",
+        "error": "Failed to establish connection",
         "text": "https://dtsc.ca.gov/perchlorate/"
     },
     {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485509.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=environmenteu&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=environmenteu&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/environment_europe"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485452.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
+        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485476.html",
+        "href": "http://www.blauer-engel.de",
+        "resolved_url": "http://www.blauer-engel.de",
         "status": "Connection Error",
         "error": "Failed to establish connection",
-        "text": "www.xerox.com/rmlna"
+        "text": "www.blauer-engel.de"
+    },
+    {
+        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485468.html",
+        "href": "https://www.energystar.gov/",
+        "resolved_url": "https://www.energystar.gov/",
+        "status": "Connection Error",
+        "error": "Failed to establish connection",
+        "text": "https://www.energystar.gov/"
     },
     {
         "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485394.html",
@@ -80,12 +48,12 @@
         "text": "https://safetysheets.business.xerox.com/en-us/"
     },
     {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485366.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC92XX&PgName=reg&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC92XX&PgName=reg&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/office/register"
+        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485387.html",
+        "href": "http://www.energystar.gov",
+        "resolved_url": "http://www.energystar.gov",
+        "status": "Connection Error",
+        "error": "Failed to establish connection",
+        "text": "www.energystar.gov"
     },
     {
         "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485366.html",
@@ -94,30 +62,6 @@
         "status": 403,
         "error": "HTTP 403",
         "text": "Xerox Safety Data Sheets and Compliance Informatio"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485366.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC9065_PLC9070&PgName=msdseu&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&Model=PLC9065_PLC9070&PgName=msdseu&Language=English",
-        "status": 403,
-        "error": "HTTP 403",
-        "text": "www.xerox.com/environment_europe"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001485309.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=environmentna&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=environmentna&Language=English",
-        "status": "Timeout",
-        "error": "Request timed out",
-        "text": "www.xerox.com/environment"
-    },
-    {
-        "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox/0001484950.html",
-        "href": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
-        "resolved_url": "https://www.office.xerox.com/cgi-bin/printer.pl?APP=udpdfs&Page=color&PgName=rmlna&Language=English",
-        "status": "Connection Error",
-        "error": "Failed to establish connection",
-        "text": "www.xerox.com/rmlna"
     },
     {
         "file": "/aiforce/aiforce-dms/app/assets/data/uploaded_data/25/Validator Initial Files/Xerox_en-US_initial_HTML_20260105_080232_050502/Xerox_en-US_initial_HTML/Xerox_en-US/Xerox.html",
